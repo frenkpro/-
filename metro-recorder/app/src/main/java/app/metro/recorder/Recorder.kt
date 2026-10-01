@@ -297,7 +297,7 @@ class Recorder(private val ctx: Context, val dir: File, private val scanInterval
         Live.netsTotal = recent.size
         Live.aiThinker = recent.count { ssidOf(it).startsWith("AI-THINKER", ignoreCase = true) }
         Live.mtFree = recent.count { ssidOf(it).contains("MT_FREE", ignoreCase = true) }
-        Live.wifiTop = recent.sortedByDescending { it.level }.take(12)
+        Live.wifiTop = recent.sortedWith(Comparator { a, b -> b.level.compareTo(a.level) }).take(12)
             .map { WifiItem(ssidOf(it), it.BSSID ?: "", it.level, it.frequency) }
         if (updated) Live.lastScanAt = t
 
@@ -480,6 +480,7 @@ class Recorder(private val ctx: Context, val dir: File, private val scanInterval
             gnssRaw.line("${now()},${ms.size},${f1(cn0)},$agc")
         }
 
+        @Deprecated("Deprecated in Java")
         override fun onStatusChanged(status: Int) {
             event("gnss_raw_status", status.toString())
         }

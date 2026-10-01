@@ -24,10 +24,9 @@
 
 ## Установка
 
-1. Откройте вкладку **Actions** этого репозитория → последний успешный запуск
-   «Metro Recorder APK» → внизу раздел **Artifacts** → скачайте `MetroRecorder-N`.
-2. Внутри архива — файл `.apk`. Откройте его на телефоне и разрешите установку
-   из этого источника.
+1. Возьмите файл `.apk`: из вкладки **Actions** этого репозитория (последний успешный запуск
+   «Metro Recorder APK» → раздел **Artifacts**) или собранный скриптом `tools/build-without-sdk.sh`.
+2. Откройте `.apk` на телефоне и разрешите установку из этого источника.
 3. Новые версии ставятся поверх старой, записи не теряются.
 
 ## Подготовка телефона (один раз)
@@ -66,5 +65,9 @@
 
 ## Сборка
 
-Собирается автоматически в GitHub Actions при каждом изменении папки `metro-recorder`.
-Локально: `./gradlew assembleRelease` (нужен Android SDK).
+- **GitHub Actions** — автоматически при каждом изменении папки `metro-recorder`
+  (`.github/workflows/metro-recorder.yml`).
+- **Локально с Android SDK** — `./gradlew assembleRelease`.
+- **Без Android SDK** — `tools/build-without-sdk.sh <versionCode>`: собирает APK из Kotlin 1.9,
+  классов Android 14 из Maven Central и пакетов Ubuntu `aapt zipalign apksigner dalvik-exchange`.
+  Номер версии должен быть больше, чем у установленной, иначе Android не обновит приложение.

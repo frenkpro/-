@@ -40,7 +40,7 @@ object Sessions {
         val active = RecorderService.recorder?.dir
         return (root(ctx).listFiles() ?: emptyArray())
             .filter { it.isDirectory && it != active }
-            .sortedByDescending { it.name }
+            .sortedWith(Comparator { a, b -> b.name.compareTo(a.name) })
             .map { d ->
                 val meta = try {
                     JSONObject(File(d, "meta.json").readText())
@@ -61,7 +61,7 @@ object Sessions {
     private fun zip(ctx: Context, dir: File): File {
         val out = File(exportsDir(ctx), zipName(dir))
         ZipOutputStream(out.outputStream().buffered()).use { z ->
-            for (f in (dir.listFiles() ?: emptyArray()).sortedBy { it.name }) {
+            for (f in (dir.listFiles() ?: emptyArray()).sortedWith(Comparator { a, b -> a.name.compareTo(b.name) })) {
                 z.putNextEntry(ZipEntry("${dir.name}/${f.name}"))
                 f.inputStream().use { it.copyTo(z) }
                 z.closeEntry()
